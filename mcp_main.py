@@ -1,5 +1,10 @@
-from mcp.server.fastmcp import FastMCP
-import pandas as pd
+from server import mcp
+import extracao_dados
+import info
+import transformacao
+import dagster_pipeline
 
-# Cria a instância do servidor
-mcp = FastMCP("DagsterTools")
+if __name__ == "__main__":
+    print("Iniciando MCP...")
+    mcp.run()
+
