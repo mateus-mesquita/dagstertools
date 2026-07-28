@@ -1,5 +1,5 @@
 import pandas as pd
-from server import mcp
+from servidor_mcp.server import mcp
 
 # Importando os módulos para registrar as ferramentas (@mcp.tool) no servidor
 import extracao.ops.pandas.extracao_dados
