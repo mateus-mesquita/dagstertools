@@ -1,12 +1,15 @@
 import pandas as pd
 import json
-from dagster import op
-from server import mcp
+from dagster import op, Config
+from servidor_mcp.server import mcp
+
+class GraphConfig(Config):
+    separador: str = ""
 
 # Criando ferramenta/op de leitura de arquivo unificada
 @mcp.tool()
 @op
-def read_file_graph(caminho: str, separador: str = ""):
+def read_file_graph(config: GraphConfig, caminho: str):
     """
     Ferramenta MCP (e op Dagster) unificada para orquestrar a leitura de arquivos de dados.
     
@@ -15,14 +18,13 @@ def read_file_graph(caminho: str, separador: str = ""):
     
     Parâmetros:
     - caminho (str): O caminho absoluto ou relativo para o arquivo de dados.
-    - separador (str, opcional): Delimitador a ser usado caso o arquivo seja um CSV.
     
     Retorno:
     - string JSON estruturada contendo os dados do arquivo lido.
     """
     try:
         if caminho.endswith(".csv"):
-            dados = pd.read_csv(caminho, sep=separador if separador else None, engine='python')
+            dados = pd.read_csv(caminho, sep=config.separador if config.separador else None, engine='python')
         elif caminho.endswith(".xlsx"):
             dados = pd.read_excel(caminho)
         elif caminho.endswith(".parquet"):
