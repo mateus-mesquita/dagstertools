@@ -1,12 +1,14 @@
 import pandas as pd
 import json
-from dagster import op
-from server import mcp
+from dagster import op, Config
+from servidor_mcp.server import mcp
 
+class CsvConfig(Config):
+    separador: str = ""
 
 @mcp.tool()
 @op 
-def read_csv(caminho: str, separador: str = "") -> str:
+def read_csv(config: CsvConfig, caminho: str) -> str:
     """
     Ferramenta MCP (e op Dagster) para carregar arquivos CSV.
     
@@ -19,8 +21,8 @@ def read_csv(caminho: str, separador: str = "") -> str:
     - Falha: Uma string JSON informando o erro (ex: arquivo não encontrado ou vazio).
     """
     try:
-        if separador:
-            dados = pd.read_csv(caminho, sep=separador)
+        if config.separador:
+            dados = pd.read_csv(caminho, sep=config.separador)
         else:
             try:
                 dados = pd.read_csv(caminho, sep=None, engine='python')
