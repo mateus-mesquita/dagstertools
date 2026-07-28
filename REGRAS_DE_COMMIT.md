@@ -30,14 +30,14 @@ git add extracao/ops/pandas/extracao_dados.py
 git commit -m "fix: Corrigido formato de saída no pandas"
 ```
 
-### 3. Arquivos Principais do Servidor MCP
-Qualquer alteração feita nos arquivos globais do servidor, ou seja, em `mcp_main.py` ou `server.py`, deve ser **obrigatoriamente** commitada na branch:
+### 3. Pasta do Servidor MCP
+Qualquer alteração, criação ou deleção de arquivos dentro da pasta `servidor_mcp/` (como `mcp_main.py` ou `server.py`) deve ser **obrigatoriamente** commitada na branch:
 👉 **`servidor`**
 
 **Exemplo de fluxo:**
 ```bash
 git switch servidor
-git add mcp_main.py server.py
+git add servidor_mcp/
 git commit -m "fix: Ajustes na inicialização do servidor MCP"
 ```
 
