@@ -7,7 +7,17 @@ from server import mcp
 @mcp.tool()
 @op 
 def read_csv(caminho: str, separador: str = "") -> str:
-    """Lê um arquivo CSV e retorna os dados em formato JSON"""
+    """
+    Ferramenta MCP (e op Dagster) para carregar arquivos CSV.
+    
+    Extrai os dados de um arquivo CSV (Comma-Separated Values) usando a biblioteca Pandas.
+    Caso um separador específico não seja fornecido, tenta inferir automaticamente o delimitador correto.
+    Ideal para ler arquivos de texto estruturados em colunas.
+    
+    Retorno:
+    - Sucesso: Uma string JSON contendo uma lista de dicionários (orient="records") com os dados.
+    - Falha: Uma string JSON informando o erro (ex: arquivo não encontrado ou vazio).
+    """
     try:
         if separador:
             dados = pd.read_csv(caminho, sep=separador)
@@ -30,7 +40,16 @@ def read_csv(caminho: str, separador: str = "") -> str:
 @mcp.tool()
 @op
 def read_excel(caminho: str) -> str:
-    """Lê um arquivo Excel e retorna os dados em formato JSON"""
+    """
+    Ferramenta MCP (e op Dagster) para carregar planilhas Excel.
+    
+    Extrai os dados de um arquivo Excel (.xls ou .xlsx) usando a biblioteca Pandas.
+    Útil para ingestão de dados que foram salvos de planilhas.
+    
+    Retorno:
+    - Sucesso: Uma string JSON contendo uma lista de dicionários (orient="records") com os dados.
+    - Falha: Uma string JSON informando o erro.
+    """
     try:
         dados = pd.read_excel(caminho)
         return dados.to_json(orient="records")
@@ -43,7 +62,16 @@ def read_excel(caminho: str) -> str:
 @mcp.tool()
 @op 
 def read_parquet(caminho: str) -> str:
-    """Lê um arquivo Parquet e retorna os dados em formato JSON"""
+    """
+    Ferramenta MCP (e op Dagster) para carregar arquivos Parquet.
+    
+    Lê o conteúdo de um arquivo colunar no formato Parquet usando a biblioteca Pandas.
+    Este formato é muito utilizado em Big Data por sua compactação e eficiência de leitura.
+    
+    Retorno:
+    - Sucesso: Uma string JSON contendo uma lista de dicionários (orient="records") com os dados.
+    - Falha: Uma string JSON informando o erro.
+    """
     try:
         dados = pd.read_parquet(caminho)
         return dados.to_json(orient="records")
@@ -56,7 +84,17 @@ def read_parquet(caminho: str) -> str:
 @mcp.tool()
 @op
 def read_json(caminho: str) -> str:
-    """Lê um arquivo JSON e retorna os dados estruturados"""
+    """
+    Ferramenta MCP (e op Dagster) para estruturar arquivos JSON brutos.
+    
+    Lê o conteúdo de um arquivo .json e o carrega usando Pandas. 
+    Serve para validar se a estrutura do arquivo original pode ser convertida corretamente 
+    em formato colunar (DataFrame) antes de devolvê-la de forma padronizada.
+    
+    Retorno:
+    - Sucesso: Uma string JSON padronizada (orient="records").
+    - Falha: Uma string JSON informando erros de parsing (ValueError) ou ausência de arquivo.
+    """
     try:
         dados = pd.read_json(caminho)
         return dados.to_json(orient="records")
