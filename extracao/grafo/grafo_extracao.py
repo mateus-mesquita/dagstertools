@@ -1,15 +1,16 @@
-from extracao.ops.pandas.extracao_dados import read_csv, read_excel, read_parquet, read_json
-from dagster import graph
-from mcp_main import mcp
+import pandas as pd
+import json
+from dagster import op
+from server import mcp
 
-# Criando grafo de leitura de arquivo
+# Criando ferramenta/op de leitura de arquivo unificada
 @mcp.tool()
-@graph
+@op
 def read_file_graph(caminho: str, separador: str = ""):
     """
-    Grafo Dagster (e ferramenta MCP) para orquestrar a leitura de arquivos de dados.
+    Ferramenta MCP (e op Dagster) unificada para orquestrar a leitura de arquivos de dados.
     
-    Este grafo tenta decidir qual operação de leitura executar com base na extensão
+    Este op decide qual operação de leitura executar com base na extensão
     do arquivo fornecido no `caminho`.
     
     Parâmetros:
@@ -19,18 +20,18 @@ def read_file_graph(caminho: str, separador: str = ""):
     Retorno:
     - string JSON estruturada contendo os dados do arquivo lido.
     """
-    if caminho.endswith(".csv"):
-        dados = read_csv(caminho, separador)
-        return dados
-    elif caminho.endswith(".xlsx"):
-        dados = read_excel(caminho)
-        return dados
-    elif caminho.endswith(".parquet"):
-        dados = read_parquet(caminho)
-        return dados
-    elif caminho.endswith(".json"):
-        dados = read_json(caminho)
-        return dados
-    else:
-        raise ValueError("Formato de arquivo não suportado")
-        return None
+    try:
+        if caminho.endswith(".csv"):
+            dados = pd.read_csv(caminho, sep=separador if separador else None, engine='python')
+        elif caminho.endswith(".xlsx"):
+            dados = pd.read_excel(caminho)
+        elif caminho.endswith(".parquet"):
+            dados = pd.read_parquet(caminho)
+        elif caminho.endswith(".json"):
+            dados = pd.read_json(caminho)
+        else:
+            return json.dumps({"erro": "Formato de arquivo não suportado"})
+            
+        return dados.to_json(orient="records")
+    except Exception as e:
+        return json.dumps({"erro": f"Erro ao ler arquivo: {str(e)}"})
