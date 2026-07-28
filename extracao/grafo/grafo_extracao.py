@@ -6,6 +6,19 @@ from mcp_main import mcp
 @mcp.tool()
 @graph
 def read_file_graph(caminho: str, separador: str = ""):
+    """
+    Grafo Dagster (e ferramenta MCP) para orquestrar a leitura de arquivos de dados.
+    
+    Este grafo tenta decidir qual operação de leitura executar com base na extensão
+    do arquivo fornecido no `caminho`.
+    
+    Parâmetros:
+    - caminho (str): O caminho absoluto ou relativo para o arquivo de dados.
+    - separador (str, opcional): Delimitador a ser usado caso o arquivo seja um CSV.
+    
+    Retorno:
+    - string JSON estruturada contendo os dados do arquivo lido.
+    """
     if caminho.endswith(".csv"):
         dados = read_csv(caminho, separador)
         return dados
