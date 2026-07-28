@@ -30,15 +30,26 @@ git add extracao/ops/pandas/extracao_dados.py
 git commit -m "fix: Corrigido formato de saída no pandas"
 ```
 
-### 3. Pasta do Servidor MCP
-Qualquer alteração, criação ou deleção de arquivos dentro da pasta `servidor_mcp/` (como `mcp_main.py` ou `server.py`) deve ser **obrigatoriamente** commitada na branch:
+### 3. Pasta do Servidor MCP e Dockerfile
+Qualquer alteração, criação ou deleção de arquivos dentro da pasta `servidor_mcp/` (como `mcp_main.py` ou `server.py`), bem como qualquer alteração no arquivo `Dockerfile`, deve ser **obrigatoriamente** commitada na branch:
 👉 **`servidor`**
 
 **Exemplo de fluxo:**
 ```bash
 git switch servidor
-git add servidor_mcp/
-git commit -m "fix: Ajustes na inicialização do servidor MCP"
+git add servidor_mcp/ Dockerfile
+git commit -m "fix: Ajustes na inicialização do servidor MCP e Dockerfile"
+```
+
+### 4. Pasta Geral de Tratamento de Dados
+Qualquer alteração, criação ou deleção de arquivos que ocorra dentro da pasta `tratamento` (exceto subpastas com regras específicas) deve **obrigatoriamente** ser commitada na branch:
+👉 **`tratamento-de-dados`**
+
+**Exemplo de fluxo:**
+```bash
+git switch tratamento-de-dados
+git add tratamento/ops/novo_script.py
+git commit -m "feat: Adicionado novo script de tratamento geral"
 ```
 
 ---
@@ -53,8 +64,10 @@ Quando o merge for solicitado, ele deve respeitar estritamente a seguinte ordem 
    *(Primeiro as alterações locais de tratamento no pandas sobem para a pasta geral de extração)*
 2. **`extracao-de-dados` -> `master`**
    *(Por fim, a extração de dados consolidada sobe para a branch principal)*
-3. **`servidor` -> `master`**
-   *(As alterações nos arquivos principais do servidor MCP vão direto para a master, sem passar pelas branches de extração de dados)*
+3. **`tratamento-de-dados` -> `master`**
+   *(Por fim, o tratamento de dados consolidado sobe para a branch principal)*
+4. **`servidor` -> `master`**
+   *(As alterações nos arquivos principais do servidor MCP vão direto para a master, sem passar pelas branches de dados)*
 
 ---
 
