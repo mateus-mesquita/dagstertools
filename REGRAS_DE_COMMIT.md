@@ -52,6 +52,19 @@ git add tratamento/ops/novo_script.py
 git commit -m "feat: Adicionado novo script de tratamento geral"
 ```
 
+### 5. Subpasta Pandas em Tratamento
+Todas as alterações que envolvam arquivos especificamente dentro da subpasta `tratamento/ops/pandas/` devem **obrigatoriamente** ser commitadas na branch:
+👉 **`tratamento-lib-pandas`**
+
+*(Lembrando que a branch `tratamento-lib-pandas` é uma ramificação direta da branch `tratamento-de-dados`).*
+
+**Exemplo de fluxo:**
+```bash
+git switch tratamento-lib-pandas
+git add tratamento/ops/pandas/numericos.py
+git commit -m "feat: Tratamento numérico usando pandas"
+```
+
 ---
 
 ## 🔀 Regras de Merge
@@ -62,15 +75,17 @@ Quando o merge for solicitado, ele deve respeitar estritamente a seguinte ordem 
 
 1. **`pandas` -> `extracao-de-dados`**
    *(Primeiro as alterações locais de tratamento no pandas sobem para a pasta geral de extração)*
-2. **`extracao-de-dados` -> `master`**
+2. **`tratamento-lib-pandas` -> `tratamento-de-dados`**
+   *(As alterações da subpasta pandas sobem para a pasta geral de tratamento)*
+3. **`extracao-de-dados` -> `master`**
    *(Por fim, a extração de dados consolidada sobe para a branch principal)*
-3. **`tratamento-de-dados` -> `master`**
+4. **`tratamento-de-dados` -> `master`**
    *(Por fim, o tratamento de dados consolidado sobe para a branch principal)*
-4. **`servidor` -> `master`**
+5. **`servidor` -> `master`**
    *(As alterações nos arquivos principais do servidor MCP vão direto para a master, sem passar pelas branches de dados)*
 
 ---
 
 ## ⚠️ O que NÃO Fazer
-- **Nunca** commite arquivos da pasta `pandas` enquanto estiver na branch `extracao-de-dados`. 
-- **Nunca** misture, no mesmo commit, alterações da pasta geral de extração com a pasta do pandas. Elas devem ser commitadas em suas respectivas branches.
+- **Nunca** commite arquivos da pasta `pandas` ou `tratamento/ops/pandas` enquanto estiver nas branches gerais (`extracao-de-dados` ou `tratamento-de-dados`). 
+- **Nunca** misture, no mesmo commit, alterações das pastas gerais com as pastas específicas do pandas. Elas devem ser commitadas em suas respectivas branches.
