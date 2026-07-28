@@ -1,10 +1,9 @@
+import pandas as pd
 from server import mcp
-import extracao_dados
-import info
-import transformacao
-import dagster_pipeline
+
+# Importando os módulos para registrar as ferramentas (@mcp.tool) no servidor
+import extracao.ops.pandas.extracao_dados
+import extracao.grafo.grafo_extracao
 
 if __name__ == "__main__":
-    print("Iniciando MCP...")
     mcp.run()
-
